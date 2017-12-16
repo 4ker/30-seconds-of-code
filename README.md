@@ -141,11 +141,9 @@ const chunk = (arr, size) =>
 // chunk([1,2,3,4,5], 2) -> [[1,2],[3,4],[5]]
 ```
 
----
-
-TODO
-
 ### Compact
+
+compact(arr): 居然过滤掉 falsy 元素竟是这么简单...
 
 Use `Array.filter()` to filter out falsey values (`false`, `null`, `0`, `""`, `undefined`, and `NaN`).
 
@@ -154,9 +152,9 @@ const compact = (arr) => arr.filter(v => v);
 // compact([0, 1, false, 2, '', 3, 'a', 'e'*23, NaN, 's', 34]) -> [ 1, 2, 3, 'a', 's', 34 ]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Count occurrences of a value in array
+
+很无聊的功能... 就是用 reduce 做一个 for 循环的事.
 
 Use `Array.reduce()` to increment a counter each time you encounter the specific value inside the array.
 
@@ -165,9 +163,9 @@ const countOccurrences = (arr, value) => arr.reduce((a, v) => v === value ? a + 
 // countOccurrences([1,1,2,1,2,3], 1) -> 3
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Deep flatten array
+
+deepFlatten(arr): 递归, 直到操作的对象为 arr 为止.
 
 Use recursion.
 Use `Array.concat()` with an empty array (`[]`) and the spread operator (`...`) to flatten an array.
@@ -178,9 +176,9 @@ const deepFlatten = arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlat
 // deepFlatten([1,[2],[[3],4],5]) -> [1,2,3,4,5]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Drop elements in array
+
+dropElements(arr,func): drop 元素, 直到满足 func 的条件, 用 Array.shift 来去掉头一个元素.
 
 Loop through the array, using `Array.shift()` to drop the first element of the array until the returned value from the function is `true`. 
 Returns the remaining elements.
@@ -193,9 +191,11 @@ const dropElements = (arr, func) => {
 // dropElements([1, 2, 3, 4], n => n >= 3) -> [3,4]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Fill array
+
+fillArray(arr,value,start=0,end=arr.length): 填充, 用 map 就能解决.
+
+因为限定了区间, 只能用 map 来 fill. 不然直接用 array.fill(value) 就行.
 
 Use `Array.map()` to map values between `start` (inclusive) and `end` (exclusive) to `value`.
 Omit `start` to start at the first element and/or `end` to finish at the last.
@@ -206,9 +206,9 @@ const fillArray = (arr, value, start = 0, end = arr.length) =>
 // fillArray([1,2,3,4],'8',1,3) -> [1,'8','8',4]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Filter out non-unique values in an array
+
+filterNonUnique(arr): 可以看出 filter 是一个整体操作; 用 indexOf 和 lastIndexOf 就能判定是否是唯一元素;
 
 Use `Array.filter()` for an array containing only the unique values.
 
@@ -217,9 +217,10 @@ const filterNonUnique = arr => arr.filter(i => arr.indexOf(i) === arr.lastIndexO
 // filterNonUnique([1,2,2,3,4,4,5]) -> [1,3,5]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Flatten array up to depth
+
+flattenDepth(arr,depth=1): 就是用一个 depth 标志位来判定是否走向截止,
+截止的时候要复制一份, 而不要直接返回自己 (说实话我没有理解为啥不能).
 
 Use recursion, decrementing `depth` by 1 for each level of depth.
 Use `Array.reduce()` and `Array.concat()` to merge elements or arrays.
@@ -233,9 +234,9 @@ const flattenDepth = (arr, depth = 1) =>
 // flattenDepth([1,[2],[[[3],4],5]], 2) -> [1,2,[3],4,5]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Flatten array
+
+flatten(arr): 只 flatten 一层, 利用了 arr.concat(ele) 和 arr.concat([ele]) 效果一致这一点.
 
 Use `Array.reduce()` to get all elements inside the array and `concat()` to flatten them.
 
@@ -244,9 +245,9 @@ const flatten = arr => arr.reduce((a, v) => a.concat(v), []);
 // flatten([1,[2],3,4]) -> [1,2,3,4]
 ```
 
-[⬆ back to top](#table-of-contents)
+### Get max/min value from array
 
-### Get max value from array
+arrayMax(arr): 用 Math.max.apply, 因为可以用 destructing 操作符, 所以直接 Math.max(...arr).
 
 Use `Math.max()` combined with the spread operator (`...`) to get the maximum value in the array.
 
@@ -255,10 +256,6 @@ const arrayMax = arr => Math.max(...arr);
 // arrayMax([10, 1, 5]) -> 10
 ```
 
-[⬆ back to top](#table-of-contents)
-
-### Get min value from array
-
 Use `Math.min()` combined with the spread operator (`...`) to get the minimum value in the array.
 
 ```js
@@ -266,9 +263,10 @@ const arrayMin = arr => Math.min(...arr);
 // arrayMin([10, 1, 5]) -> 1
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Group by
+
+groupBy(arr,func): 最主要利用的是 reduce 函数的第三个参数 index, 先用 map 找到 key,
+再用 reduce 来把每个 key 生成一个 [] (如果没有的话), 然后 concat 上对应 index 的 ele from array.
 
 Use `Array.map()` to map the values of an array to a function or property name.
 Use `Array.reduce()` to create an object, where the keys are produced from the mapped results.
@@ -281,9 +279,9 @@ const groupBy = (arr, func) =>
 // groupBy(['one', 'two', 'three'], 'length') -> {3: ['one', 'two'], 5: ['three']}
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Head of list
+
+head(arr): arr[0] 直接取.
 
 Use `arr[0]` to return the first element of the passed array.
 
@@ -292,9 +290,15 @@ const head = arr => arr[0];
 // head([1,2,3]) -> 1
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Initial of list
+
+initial(arr): 用 slice 去掉最后一个.
+
+[Array.prototype.slice() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+
+一直没有搞懂这个函数是怎么用的, 原来函数签名这么简单: arr.slice([begin[, end]]),
+而且顾名思义, 就是从 array 里面 slice 一片出来. 很赞的是支持负数的 index,
+所以这里可以用 slice(0,-1) 去掉最后一个元素.
 
 Use `arr.slice(0,-1)`to return all but the last element of the array.
 
@@ -303,9 +307,9 @@ const initial = arr => arr.slice(0, -1);
 // initial([1,2,3]) -> [1,2]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Initialize array with range
+
+函数不难理解... 可是这个使用方法有点奇怪啊...
 
 Use `Array(end-start)` to create an array of the desired length, `Array.map()` to fill with the desired values in a range.
 You can omit `start` to use a default value of `0`.
@@ -314,11 +318,12 @@ You can omit `start` to use a default value of `0`.
 const initializeArrayRange = (end, start = 0) =>
   Array.apply(null, Array(end - start)).map((v, i) => i + start);
 // initializeArrayRange(5) -> [0,1,2,3,4]
+// initializeArrayRange(5,2) -> [2,3,4]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Initialize array with values
+
+initializeArray(n,value=0): 用 Array(n).fill(value).
 
 Use `Array(n)` to create an array of the desired length, `fill(v)` to fill it with the desired values.
 You can omit `value` to use a default value of `0`.
@@ -328,9 +333,9 @@ const initializeArray = (n, value = 0) => Array(n).fill(value);
 // initializeArray(5, 2) -> [2,2,2,2,2]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Last of list
+
+last(arr): 还是用 slice, 但是记得要取出这个元素. 和 arr[arr.length-1] 似乎没啥区别啊...
 
 Use `arr.slice(-1)[0]` to get the last element of the given array.
 
@@ -339,7 +344,9 @@ const last = arr => arr.slice(-1)[0];
 // last([1,2,3]) -> 3
 ```
 
-[⬆ back to top](#table-of-contents)
+---
+
+TODO
 
 ### Median of array of numbers
 
