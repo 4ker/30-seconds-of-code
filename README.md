@@ -13,13 +13,24 @@ const difference = (a, b) => { const s = new Set(b); return a.filter(x => !s.has
 
 ### Array intersection
 
-intersection(a,b): 集合做与: a & b, 从 a 里选择 b 里的内容.
+intersection(a,b): 集合相交, 从 a 里选择 b 里的内容.
 
 Create a `Set` from `b`, then use `Array.filter()` on `a` to only keep values contained in `b`.
 
 ```js
 const intersection = (a, b) => { const s = new Set(b); return a.filter(x => s.has(x)); };
 // intersection([1,2,3], [4,3,2]) -> [2,3]
+```
+
+### Similarity between arrays
+
+似乎和上面没有区别.
+
+Use `filter()` to remove values that are not part of `values`, determined using `includes()`.
+
+```js
+const similarity = (arr, values) => arr.filter(v => values.includes(v));
+// similarity([1,2,3], [1,2,4]) -> [1,2]
 ```
 
 ### Array includes
@@ -290,6 +301,18 @@ const head = arr => arr[0];
 // head([1,2,3]) -> 1
 ```
 
+### Tail of list
+
+这么看来 head 和 tail 并不是不重不漏互补的.
+
+Return `arr.slice(1)` if the array's `length` is more than `1`, otherwise return the whole array.
+
+```js
+const tail = arr => arr.length > 1 ? arr.slice(1) : arr;
+// tail([1,2,3]) -> [2,3]
+// tail([1]) -> [1]
+```
+
 ### Initial of list
 
 initial(arr): 用 slice 去掉最后一个.
@@ -335,7 +358,8 @@ const initializeArray = (n, value = 0) => Array(n).fill(value);
 
 ### Last of list
 
-last(arr): 还是用 slice, 但是记得要取出这个元素. 和 arr[arr.length-1] 似乎没啥区别啊...
+last(arr): 还是用 slice, 但是记得要取出这个元素. ~~和 arr[arr.length-1] 似乎没啥区别啊...~~
+用 slice 是因为 slice 支持负数的 index, 但是 array[index] 不支持.
 
 Use `arr.slice(-1)[0]` to get the last element of the given array.
 
@@ -344,11 +368,21 @@ const last = arr => arr.slice(-1)[0];
 // last([1,2,3]) -> 3
 ```
 
----
+### Nth element of array
 
-TODO
+Use `Array.slice()` to get an array containing the nth element at the first place.
+If the index is out of bounds, return `[]`.
+Omit the second argument, `n`, to get the first element of the array.
+
+```js
+const nth = (arr, n=0) => (n>0? arr.slice(n,n+1) : arr.slice(n))[0];
+// nth(['a','b','c'],1) -> 'b'
+// nth(['a','b','c'],-2) -> 'b'
+```
 
 ### Median of array of numbers
+
+median(arr): 排序, 然后找中间.
 
 Find the middle of the array, use `Array.sort()` to sort the values.
 Return the number at the midpoint if `length` is odd, otherwise the average of the two middle numbers.
@@ -362,23 +396,13 @@ const median = arr => {
 // median([0,10,-2,7]) -> 3.5
 ```
 
-[⬆ back to top](#table-of-contents)
-
-### Nth element of array
-
-Use `Array.slice()` to get an array containing the nth element at the first place. 
-If the index is out of bounds, return `[]`.
-Omit the second argument, `n`, to get the first element of the array.
-
-```js
-const nth = (arr, n=0) => (n>0? arr.slice(n,n+1) : arr.slice(n))[0];
-// nth(['a','b','c'],1) -> 'b'
-// nth(['a','b','b']-2) -> 'a'
-```
-
-[⬆ back to top](#table-of-contents)
-
 ### Pick
+
+pick(obj,arr): 用了 key in obj 来判定是否有这个 field. 因为 key in field 不能嵌套,
+所以这里的 arr 只能是 'key' 而不是 'key.subKey'.
+
+`curr in obj && (acc[curr] = obj[curr]), acc` 而不是
+`curr in obj ? (acc[curr] = obj[curr], acc) : acc`, 很巧妙.
 
 Use `Array.reduce()` to convert the filtered/picked keys back to a object with the corresponding key:value pair if the key exist in the obj.
 
@@ -386,12 +410,29 @@ Use `Array.reduce()` to convert the filtered/picked keys back to a object with t
 const pick = (obj, arr) =>
   arr.reduce((acc, curr) => (curr in obj && (acc[curr] = obj[curr]), acc), {});
 // pick({ 'a': 1, 'b': '2', 'c': 3 }, ['a', 'c']) -> { 'a': 1, 'c': 3 }
-// pick(object, ['a', 'c'])['a'] -> 1
 ```
 
-[⬆ back to top](#table-of-contents)
+### Object from key-value pairs
+
+Use `Array.reduce()` to create and combine key-value pairs.
+
+```js
+const objectFromPairs = arr => arr.reduce((a, v) => (a[v[0]] = v[1], a), {});
+// objectFromPairs([['a',1],['b',2]]) -> {a: 1, b: 2}
+```
+
+### Object to key-value pairs
+
+Use `Object.keys()` and `Array.map()` to iterate over the object's keys and produce an array with key-value pairs.
+
+```js
+const objectToPairs = obj => Object.keys(obj).map(k => [k, obj[k]]);
+// objectToPairs({a: 1, b: 2}) -> [['a',1],['b',2]])
+```
 
 ### Shuffle array
+
+膜法啊! 思路清奇.
 
 Use `Array.sort()` to reorder elements, using `Math.random()` in the comparator.
 
@@ -399,54 +440,6 @@ Use `Array.sort()` to reorder elements, using `Math.random()` in the comparator.
 const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 // shuffle([1,2,3]) -> [2,3,1]
 ```
-
-[⬆ back to top](#table-of-contents)
-
-### Similarity between arrays
-
-Use `filter()` to remove values that are not part of `values`, determined using `includes()`.
-
-```js
-const similarity = (arr, values) => arr.filter(v => values.includes(v));
-// similarity([1,2,3], [1,2,4]) -> [1,2]
-```
-
-[⬆ back to top](#table-of-contents)
-
-### Sum of array of numbers
-
-Use `Array.reduce()` to add each value to an accumulator, initialized with a value of `0`.
-
-```js
-const sum = arr => arr.reduce((acc, val) => acc + val, 0);
-// sum([1,2,3,4]) -> 10
-```
-
-[⬆ back to top](#table-of-contents)
-
-### Tail of list
-
-Return `arr.slice(1)` if the array's `length` is more than `1`, otherwise return the whole array.
-
-```js
-const tail = arr => arr.length > 1 ? arr.slice(1) : arr;
-// tail([1,2,3]) -> [2,3]
-// tail([1]) -> [1]
-```
-
-[⬆ back to top](#table-of-contents)
-
-### Take right
-
-Use `Array.slice()` to create a slice of the array with `n` elements taken from the end.
-
-```js
-const takeRight = (arr, n = 1) => arr.slice(arr.length - n, arr.length);
-// takeRight([1, 2, 3], 2) -> [ 2, 3 ]
-// takeRight([1, 2, 3]) -> [3]
-```
-
-[⬆ back to top](#table-of-contents)
 
 ### Take
 
@@ -458,9 +451,21 @@ const take = (arr, n = 1) => arr.slice(0, n);
 // take([1, 2, 3], 0) -> []
 ```
 
-[⬆ back to top](#table-of-contents)
+### Take right
+
+其实 slice 默认就是到末尾了, 所以第二个参数不必要.
+
+Use `Array.slice()` to create a slice of the array with `n` elements taken from the end.
+
+```js
+const takeRight = (arr, n = 1) => arr.slice(arr.length - n, arr.length);
+// takeRight([1, 2, 3], 2) -> [ 2, 3 ]
+// takeRight([1, 2, 3]) -> [3]
+```
 
 ### Unique values of array
+
+哈哈, 直接从 list 生成 set, 然后用 rest operator (居然可以用 ...set).
 
 Use ES6 `Set` and the `...rest` operator to discard all duplicated values.
 
@@ -469,7 +474,6 @@ const unique = arr => [...new Set(arr)];
 // unique([1,2,2,3,4,4,5]) -> [1,2,3,4,5]
 ```
 
-[⬆ back to top](#table-of-contents)
 ## Browser
 
 ### Bottom visible
@@ -482,8 +486,6 @@ const bottomVisible = _ =>
 // bottomVisible() -> true
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Current URL
 
 Use `window.location.href` to get current URL.
@@ -492,8 +494,6 @@ Use `window.location.href` to get current URL.
 const currentUrl = _ => window.location.href;
 // currentUrl() -> 'https://google.com'
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Element is visible in viewport
 
@@ -515,8 +515,6 @@ const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
 // elementIsVisibleInViewport(el, true) -> true (partially visible)
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Get scroll position
 
 Use `pageXOffset` and `pageYOffset` if they are defined, otherwise `scrollLeft` and `scrollTop`.
@@ -529,9 +527,20 @@ const getScrollPos = (el = window) =>
 // getScrollPos() -> {x: 0, y: 200}
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Redirect to URL
+
+直接用 window.location.href 相当于跳转了页面, 用 replace 相当于覆盖了当前页, 不能用 back button 回到上一个页面.
+MDN 的文档: [Location.replace() - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Location/replace)
+
+> The `**Location**`**`.replace()`** method replaces the current resource
+> with the one at the provided URL. The difference from the
+> [`assign()`](https://developer.mozilla.org/en-US/docs/Web/API/Location/assign
+> "The Location.assign() method causes the window to load and display the
+> document at the URL specified.") method is that after using `replace()`the
+> current page will not be saved in session
+> [`History`](https://developer.mozilla.org/en-US/docs/Web/API/History
+> "Editorial review completed."), meaning the user won't be able to use the
+> *back* button to navigate to it.
 
 Use `window.location.href` or `window.location.replace()` to redirect to `url`.
 Pass a second argument to simulate a link click (`true` - default) or an HTTP redirect (`false`).
@@ -541,8 +550,6 @@ const redirect = (url, asLink = true) =>
   asLink ? window.location.href = url : window.location.replace(url);
 // redirect('https://google.com')
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Scroll to top
 
@@ -560,7 +567,6 @@ const scrollToTop = _ => {
 // scrollToTop()
 ```
 
-[⬆ back to top](#table-of-contents)
 ## Date
 
 ### Get days difference between dates
@@ -572,7 +578,6 @@ const getDaysDiffBetweenDates = (dateInitial, dateFinal) => (dateFinal - dateIni
 // getDaysDiffBetweenDates(new Date("2017-12-13"), new Date("2017-12-22")) -> 9
 ```
 
-[⬆ back to top](#table-of-contents)
 ## Function
 
 ### Chain asynchronous functions
@@ -590,8 +595,6 @@ chainAsync([
 */
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Curry
 
 Use recursion.
@@ -608,8 +611,6 @@ const curry = (fn, arity = fn.length, ...args) =>
 // curry(Math.min, 3)(10)(50)(2) -> 2
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Pipe
 
 Use `Array.reduce()` to perform left-to-right function composition.
@@ -624,8 +625,6 @@ const multiplyAndAdd5 = pipe(multiply, add5)
 multiplyAndAdd5(5, 2) -> 15
 */
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Promisify
 
@@ -645,8 +644,6 @@ const promisify = func =>
 // delay(2000).then(() => console.log('Hi!')) -> Promise resolves after 2s
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Run promises in series
 
 Run an array of promises in series using `Array.reduce()` by creating a promise chain, where each promise returns the next promise when resolved.
@@ -656,8 +653,6 @@ const series = ps => ps.reduce((p, next) => p.then(next), Promise.resolve());
 // const delay = (d) => new Promise(r => setTimeout(r, d))
 // series([() => delay(1000), () => delay(2000)]) -> executes each promise sequentially, taking a total of 3 seconds to complete
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Sleep
 
@@ -674,22 +669,12 @@ async function sleepyWork() {
 */
 ```
 
-[⬆ back to top](#table-of-contents)
 ## Math
 
-### Collatz algorithm
-
-If `n` is even, return `n/2`. Otherwise  return `3n+1`.
-
-```js
-const collatz = n => (n % 2 == 0) ? (n / 2) : (3 * n + 1);
-// collatz(8) --> 4
-// collatz(5) --> 16
-```
-
-[⬆ back to top](#table-of-contents)
-
 ### Distance between two points
+
+还特么有这样的函数: [Math.hypot() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/hypot),
+以前都自己 sqrt(x^2+y^2)...
 
 Use `Math.hypot()` to calculate the Euclidean distance between two points.
 
@@ -697,8 +682,6 @@ Use `Math.hypot()` to calculate the Euclidean distance between two points.
 const distance = (x0, y0, x1, y1) => Math.hypot(x1 - x0, y1 - y0);
 // distance(1,1, 2,3) -> 2.23606797749979
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Divisible by number
 
@@ -709,21 +692,9 @@ const isDivisible = (dividend, divisor) => dividend % divisor === 0;
 // isDivisible(6,3) -> true
 ```
 
-[⬆ back to top](#table-of-contents)
-
-### Even or odd number
-
-Checks whether a number is odd or even using the modulo (`%`) operator.
-Returns `true` if the number is even, `false` if the number is odd.
-
-```js
-const isEven = num => num % 2 === 0;
-// isEven(3) -> false
-```
-
-[⬆ back to top](#table-of-contents)
-
 ### Factorial
+
+这个不是尾递归, 可能会爆栈.
 
 Use recursion.
 If `n` is less than or equal to `1`, return `1`.
@@ -734,9 +705,16 @@ const factorial = n => n <= 1 ? 1 : n * factorial(n - 1);
 // factorial(6) -> 720
 ```
 
-[⬆ back to top](#table-of-contents)
+写了个尾递归的:
+
+```js
+const factorial = (n, ret=1) => n <= 1 ? ret : factorial(n - 1, n*res);
+// factorial(6) -> 720
+```
 
 ### Fibonacci array generator
+
+reduce 的妙用.
 
 Create an empty array of the specific length, initializing the first two values (`0` and `1`).
 Use `Array.reduce()` to add values into the array, using the sum of the last two values, except for the first two.
@@ -747,9 +725,9 @@ const fibonacci = n =>
 // fibonacci(5) -> [0,1,1,2,3]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Greatest common divisor (GCD)
+
+碾转相除.
 
 Use recursion.
 Base case is when `y` equals `0`. In this case, return `x`.
@@ -760,9 +738,9 @@ const gcd = (x, y) => !y ? x : gcd(y, x % y);
 // gcd (8, 36) -> 4
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Hamming distance
+
+js 也有 XOR... 而且 toString 可以接受 radix. 还用 regex 来匹配 1 并计数.
 
 Use XOR operator (`^`) to find the bit difference between the two numbers, convert to binary string using `toString(2)`.
 Count and return the number of `1`s in the string, using `match(/1/g)`.
@@ -773,32 +751,15 @@ const hammingDistance = (num1, num2) =>
 // hammingDistance(2,3) -> 1
 ```
 
-[⬆ back to top](#table-of-contents)
-
-### Percentile
-
-Use `Array.reduce()` to calculate how many numbers are below the value and how many are the same value and
-apply the percentile formula.
-
-```js
-const percentile = (arr, val) => 
-  100 * arr.reduce((acc,v) => acc + (v < val ? 1 : 0) + (v === val ? 0.5 : 0), 0) / arr.length;
-// percentile([1,2,3,4,5,6,7,8,9,10], 6) -> 55
- ```
-
-[⬆ back to top](#table-of-contents)
-
 ### Powerset
 
 Use `Array.reduce()` combined with `Array.map()` to iterate over elements and combine into an array containing all combinations.
 
 ```js
 const powerset = arr =>
-  arr.reduce((a, v) => a.concat(a.map(r => [v].concat(r))), [[]]);
-// powerset([1,2]) -> [[], [1], [2], [2,1]]
+  arr.reduce((a, v) => a.concat(a.map(r => r.concat(v))), [[]]);
+// powerset([1,2]) -> [[], [1], [2], [1,2]]
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Round number to n digits
 
@@ -809,8 +770,6 @@ Omit the second argument, `decimals` to round to an integer.
 const round = (n, decimals=0) => Number(`${Math.round(`${n}e${decimals}`)}e-${decimals}`);
 // round(1.005, 2) -> 1.01
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Standard deviation
 
@@ -830,7 +789,6 @@ const standardDeviation = (arr, usePopulation = false) => {
 // standardDeviation([10,2,38,23,38,23,21], true) -> 12.29899614287479 (population)
 ```
 
-[⬆ back to top](#table-of-contents)
 ## Media
 
 ### Speech synthesis (experimental)
@@ -849,43 +807,7 @@ const speak = message => {
 // speak('Hello, World') -> plays the message
 ```
 
-[⬆ back to top](#table-of-contents)
-## Node
-
-### Write a JSON to a file
-
-Use `fs.writeFile()`, template literals and `JSON.stringify()` to write a `json` object to a `.json` file.
-
-```js
-const fs = require('fs');
-const jsonToFile = (obj, filename) => fs.writeFile(`${filename}.json`, JSON.stringify(obj, null, 2))
-// jsonToFile({test: "is passed"}, 'testJsonFile') -> writes the object to 'testJsonFile.json'
-```
-
-[⬆ back to top](#table-of-contents)
 ## Object
-
-### Object from key-value pairs
-
-Use `Array.reduce()` to create and combine key-value pairs.
-
-```js
-const objectFromPairs = arr => arr.reduce((a, v) => (a[v[0]] = v[1], a), {});
-// objectFromPairs([['a',1],['b',2]]) -> {a: 1, b: 2}
-```
-
-[⬆ back to top](#table-of-contents)
-
-### Object to key-value pairs
-
-Use `Object.keys()` and `Array.map()` to iterate over the object's keys and produce an array with key-value pairs.
-
-```js
-const objectToPairs = obj => Object.keys(obj).map(k => [k, obj[k]]);
-// objectToPairs({a: 1, b: 2}) -> [['a',1],['b',2]])
-```
-
-[⬆ back to top](#table-of-contents)
 
 ### Shallow clone object
 
@@ -900,7 +822,6 @@ a === b -> false
 */
 ```
 
-[⬆ back to top](#table-of-contents)
 ## String
 
 ### Anagrams of string (with duplicates)
@@ -919,8 +840,6 @@ const anagrams = str => {
 // anagrams('abc') -> ['abc','acb','bac','bca','cab','cba']
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Capitalize first letter of every word
 
 Use `replace()` to match the first character of each word and `toUpperCase()` to capitalize it.
@@ -929,8 +848,6 @@ Use `replace()` to match the first character of each word and `toUpperCase()` to
 const capitalizeEveryWord = str => str.replace(/\b[a-z]/g, char => char.toUpperCase());
 // capitalizeEveryWord('hello world!') -> 'Hello World!'
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Capitalize first letter
 
@@ -944,8 +861,6 @@ const capitalize = ([first,...rest], lowerRest = false) =>
 // capitalize('myName', true) -> 'Myname'
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Check for palindrome
 
 Convert string `toLowerCase()` and use `replace()` to remove non-alphanumeric characters from it.
@@ -957,9 +872,7 @@ const palindrome = str => {
   return s === s.split('').reverse().join('');
 }
 // palindrome('taco cat') -> true
- ```
-
-[⬆ back to top](#table-of-contents)
+```
 
 ### Reverse a string
 
@@ -971,8 +884,6 @@ const reverseString = str => [...str].reverse().join('');
 // reverseString('foobar') -> 'raboof'
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Sort characters in string (alphabetical)
 
 Split the string using `split('')`, `Array.sort()` utilizing `localeCompare()`, recombine using `join('')`.
@@ -982,8 +893,6 @@ const sortCharactersInString = str =>
   str.split('').sort((a, b) => a.localeCompare(b)).join('');
 // sortCharactersInString('cabbage') -> 'aabbceg'
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Truncate a String
 
@@ -996,7 +905,6 @@ const truncate = (str, num) =>
 // truncate('boomerang', 7) -> 'boom...'
 ```
 
-[⬆ back to top](#table-of-contents)
 ## Utility
 
 ### Escape regular expression
@@ -1008,8 +916,6 @@ const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // escapeRegExp('(test)') -> \\(test\\)
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Get native type of value
 
 Returns lower-cased constructor name of value, "undefined" or "null" if value is undefined or null
@@ -1020,8 +926,6 @@ const getType = v =>
 // getType(new Set([1,2,3])) -> "set"
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Hexcode to RGB
 
 Use `Array.slice()`, `Array.map()` and `match()` to convert a hexadecimal colorcode (prefixed with `#`) to a string with the RGB values.
@@ -1031,9 +935,11 @@ const hexToRgb = hex => `rgb(${hex.slice(1).match(/.{2}/g).map(x => parseInt(x, 
 // hexToRgb('#27ae60') -> 'rgb(39,174,96)'
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Is array
+
+!!v 是转化了 v 的类型为 boolean. see [What is the !! (not not) operator in JavaScript? - Stack Overflow](https://stackoverflow.com/questions/784929/what-is-the-not-not-operator-in-javascript).
+
+那些 falsy 的, 变为 false, 其他为 true.
 
 Use `Array.isArray()` to check if a value is classified as an array.
 
@@ -1042,8 +948,6 @@ const isArray = val => !!val && Array.isArray(val);
 // isArray(null) -> false
 // isArray([1]) -> true
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Is boolean
 
@@ -1055,8 +959,6 @@ const isBoolean = val => typeof val === 'boolean';
 // isBoolean(false) -> true
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Is function
 
 Use `typeof` to check if a value is classified as a function primitive.
@@ -1067,43 +969,15 @@ const isFunction = val => val && typeof val === 'function';
 // isFunction(x => x) -> true
 ```
 
-[⬆ back to top](#table-of-contents)
-
-### Is number
+### Is number/string/symbol
 
 Use `typeof` to check if a value is classified as a number primitive.
 
 ```js
 const isNumber = val => typeof val === 'number';
-// isNumber('1') -> false
-// isNumber(1) -> true
-```
-
-[⬆ back to top](#table-of-contents)
-
-### Is string
-
-Use `typeof` to check if a value is classified as a string primitive.
-
-```js
 const isString = val => typeof val === 'string';
-// isString(10) -> false
-// isString('10') -> true
-```
-
-[⬆ back to top](#table-of-contents)
-
-### Is symbol
-
-Use `typeof` to check if a value is classified as a symbol primitive.
-
-```js
 const isSymbol = val => typeof val === 'symbol';
-// isSymbol('x') -> false
-// isSymbol(Symbol('x')) -> true
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Measure time taken by function
 
@@ -1120,8 +994,6 @@ const timeTaken = callback => {
 // (logged): timeTaken: 0.02099609375ms
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Number to array of digits
 
 Convert the number to a string, use `split()` to convert build an array.
@@ -1131,8 +1003,6 @@ Use `Array.map()` and `parseInt()` to transform each value to an integer.
 const digitize = n => (''+n).split('').map(i => parseInt(i));
 // digitize(2334) -> [2, 3, 3, 4]
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Ordinal suffix of number
 
@@ -1150,7 +1020,14 @@ const toOrdinalSuffix = num => {
 // toOrdinalSuffix("123") -> "123rd"
 ```
 
-[⬆ back to top](#table-of-contents)
+### Random number in range
+
+Use `Math.random()` to generate a random value, map it to the desired range using multiplication.
+
+```js
+const randomInRange = (min, max) => Math.random() * (max - min) + min;
+// randomInRange(2,10) -> 6.0211363285087005
+```
 
 ### Random integer in range
 
@@ -1161,19 +1038,6 @@ const randomIntegerInRange = (min, max) => Math.floor(Math.random() * (max - min
 // randomIntegerInRange(0, 5) -> 2
 ```
 
-[⬆ back to top](#table-of-contents)
-
-### Random number in range
-
-Use `Math.random()` to generate a random value, map it to the desired range using multiplication.
-
-```js
-const randomInRange = (min, max) => Math.random() * (max - min) + min;
-// randomInRange(2,10) -> 6.0211363285087005
-```
-
-[⬆ back to top](#table-of-contents)
-
 ### RGB to hexadecimal
 
 Convert given RGB parameters to hexadecimal string using bitwise left-shift operator (`<<`) and `toString(16)`, then `padStart(6,'0')` to get a 6-digit hexadecimal value.
@@ -1183,8 +1047,6 @@ const rgbToHex = (r, g, b) => ((r << 16) + (g << 8) + b).toString(16).padStart(6
 // rgbToHex(255, 165, 1) -> 'ffa501'
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Swap values of two variables
 
 Use array destructuring to swap values between two variables.
@@ -1193,8 +1055,6 @@ Use array destructuring to swap values between two variables.
 [varA, varB] = [varB, varA];
 // [x, y] = [y, x]
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### URL parameters
 
@@ -1209,8 +1069,6 @@ const getUrlParameters = url =>
 // getUrlParameters('http://url.com/page?name=Adam&surname=Smith') -> {name: 'Adam', surname: 'Smith'}
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### UUID generator
 
 Use `crypto` API to generate a UUID, compliant with [RFC4122](https://www.ietf.org/rfc/rfc4122.txt) version 4.
@@ -1223,8 +1081,6 @@ const uuid = _ =>
 // uuid() -> '7982fcfe-5721-4632-bede-6000885be57d'
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Validate email
 
 Use a regular expression to check if the email is valid.
@@ -1235,8 +1091,6 @@ const validateEmail = str =>
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(str);
 // validateEmail(mymail@gmail.com) -> true
 ```
-
-[⬆ back to top](#table-of-contents)
 
 ### Validate number
 
@@ -1249,8 +1103,6 @@ const validateNumber = n => !isNaN(parseFloat(n)) && isFinite(n) && Number(n) ==
 // validateNumber('10') -> true
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Value or default
 
 Returns value, or default value if passed value is `falsy`.
@@ -1259,10 +1111,3 @@ Returns value, or default value if passed value is `falsy`.
 const valueOrDefault = (value, d) => value || d;
 // valueOrDefault(NaN, 30) -> 30
 ```
-
-[⬆ back to top](#table-of-contents)
-
-## Credits
-
-*Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/).*
-
