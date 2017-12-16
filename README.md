@@ -1,143 +1,8 @@
-![Logo](/logo.png)
-
-# 30 seconds of code [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/30-seconds-of-code/Lobby)
-> Curated collection of useful Javascript snippets that you can understand in 30 seconds or less.
-
-- Use <kbd>Ctrl</kbd> + <kbd>F</kbd> or <kbd>command</kbd> + <kbd>F</kbd> to search for a snippet.
-- Contributions welcome, please read the [contribution guide](CONTRIBUTING.md).
-- Snippets are written in ES6, use the [Babel transpiler](https://babeljs.io/) to ensure backwards-compatibility.
-
-## Table of Contents
-
-### Array
-* [Array concatenation](#array-concatenation)
-* [Array difference](#array-difference)
-* [Array includes](#array-includes)
-* [Array intersection](#array-intersection)
-* [Array remove](#array-remove)
-* [Array sample](#array-sample)
-* [Array union](#array-union)
-* [Array without](#array-without)
-* [Array zip](#array-zip)
-* [Average of array of numbers](#average-of-array-of-numbers)
-* [Chunk array](#chunk-array)
-* [Compact](#compact)
-* [Count occurrences of a value in array](#count-occurrences-of-a-value-in-array)
-* [Deep flatten array](#deep-flatten-array)
-* [Drop elements in array](#drop-elements-in-array)
-* [Fill array](#fill-array)
-* [Filter out non unique values in an array](#filter-out-non-unique-values-in-an-array)
-* [Flatten array up to depth](#flatten-array-up-to-depth)
-* [Flatten array](#flatten-array)
-* [Get max value from array](#get-max-value-from-array)
-* [Get min value from array](#get-min-value-from-array)
-* [Group by](#group-by)
-* [Head of list](#head-of-list)
-* [Initial of list](#initial-of-list)
-* [Initialize array with range](#initialize-array-with-range)
-* [Initialize array with values](#initialize-array-with-values)
-* [Last of list](#last-of-list)
-* [Median of array of numbers](#median-of-array-of-numbers)
-* [Nth element of array](#nth-element-of-array)
-* [Pick](#pick)
-* [Shuffle array](#shuffle-array)
-* [Similarity between arrays](#similarity-between-arrays)
-* [Sum of array of numbers](#sum-of-array-of-numbers)
-* [Tail of list](#tail-of-list)
-* [Take right](#take-right)
-* [Take](#take)
-* [Unique values of array](#unique-values-of-array)
-
-### Browser
-* [Bottom visible](#bottom-visible)
-* [Current URL](#current-url)
-* [Element is visible in viewport](#element-is-visible-in-viewport)
-* [Get scroll position](#get-scroll-position)
-* [Redirect to URL](#redirect-to-url)
-* [Scroll to top](#scroll-to-top)
-
-### Date
-* [Get days difference between dates](#get-days-difference-between-dates)
-
-### Function
-* [Chain asynchronous functions](#chain-asynchronous-functions)
-* [Curry](#curry)
-* [Pipe](#pipe)
-* [Promisify](#promisify)
-* [Run promises in series](#run-promises-in-series)
-* [Sleep](#sleep)
-
-### Math
-* [Collatz algorithm](#collatz-algorithm)
-* [Distance between two points](#distance-between-two-points)
-* [Divisible by number](#divisible-by-number)
-* [Even or odd number](#even-or-odd-number)
-* [Factorial](#factorial)
-* [Fibonacci array generator](#fibonacci-array-generator)
-* [Greatest common divisor (GCD)](#greatest-common-divisor-gcd)
-* [Hamming distance](#hamming-distance)
-* [Percentile](#percentile)
-* [Powerset](#powerset)
-* [Round number to n digits](#round-number-to-n-digits)
-* [Standard deviation](#standard-deviation)
-
-### Media
-* [Speech synthesis (experimental)](#speech-synthesis-experimental)
-
-### Node
-* [Write json to file](#write-json-to-file)
-
-### Object
-* [Object from key value pairs](#object-from-key-value-pairs)
-* [Object to key value pairs](#object-to-key-value-pairs)
-* [Shallow clone object](#shallow-clone-object)
-
-### String
-* [Anagrams of string (with duplicates)](#anagrams-of-string-with-duplicates)
-* [Capitalize first letter of every word](#capitalize-first-letter-of-every-word)
-* [Capitalize first letter](#capitalize-first-letter)
-* [Check for palindrome](#check-for-palindrome)
-* [Reverse a string](#reverse-a-string)
-* [Sort characters in string (alphabetical)](#sort-characters-in-string-alphabetical)
-* [Truncate a string](#truncate-a-string)
-
-### Utility
-* [Escape regular expression](#escape-regular-expression)
-* [Get native type of value](#get-native-type-of-value)
-* [Hexcode to RGB](#hexcode-to-rgb)
-* [Is array](#is-array)
-* [Is boolean](#is-boolean)
-* [Is function](#is-function)
-* [Is number](#is-number)
-* [Is string](#is-string)
-* [Is symbol](#is-symbol)
-* [Measure time taken by function](#measure-time-taken-by-function)
-* [Number to array of digits](#number-to-array-of-digits)
-* [Ordinal suffix of number](#ordinal-suffix-of-number)
-* [Random integer in range](#random-integer-in-range)
-* [Random number in range](#random-number-in-range)
-* [RGB to hexadecimal](#rgb-to-hexadecimal)
-* [Swap values of two variables](#swap-values-of-two-variables)
-* [URL parameters](#url-parameters)
-* [UUID generator](#uuid-generator)
-* [Validate email](#validate-email)
-* [Validate number](#validate-number)
-* [Value or default](#value-or-default)
-
 ## Array
 
-### Array concatenation
-
-Use `Array.concat()` to concatenate an array with any additional arrays and/or values, specified in `args`.
-
-```js
-const ArrayConcat = (arr, ...args) => [].concat(arr, ...args); 
-// ArrayConcat([1], [1, 2, 3, [4]]) -> [1, 2, 3, [4]]
-```
-
-[⬆ back to top](#table-of-contents)
-
 ### Array difference
+
+difference(a,b): 集合做查: a\b, 从 a 里去掉 b 里的内容.
 
 Create a `Set` from `b`, then use `Array.filter()` on `a` to only keep values not contained in `b`.
 
@@ -146,9 +11,20 @@ const difference = (a, b) => { const s = new Set(b); return a.filter(x => !s.has
 // difference([1,2,3], [1,2]) -> [3]
 ```
 
-[⬆ back to top](#table-of-contents)
+### Array intersection
+
+intersection(a,b): 集合做与: a & b, 从 a 里选择 b 里的内容.
+
+Create a `Set` from `b`, then use `Array.filter()` on `a` to only keep values contained in `b`.
+
+```js
+const intersection = (a, b) => { const s = new Set(b); return a.filter(x => s.has(x)); };
+// intersection([1,2,3], [4,3,2]) -> [2,3]
+```
 
 ### Array includes
+
+includes(collection, val, fromIndex=0): 看 val 是否在 collection 中, 从 fromIndex 开始.
 
 Use `slice()` to offset the array/string and `indexOf()` to check if the value is included.
 Omit the last argument, `fromIndex`, to check the whole array/string.
@@ -159,20 +35,32 @@ const includes = (collection, val, fromIndex=0) => collection.slice(fromIndex).i
 // includes([1, 2, 3, 4], [1, 2], 1) -> false
 ```
 
-[⬆ back to top](#table-of-contents)
+### Array union
 
-### Array intersection
+union(a,b): 取交集
 
-Create a `Set` from `b`, then use `Array.filter()` on `a` to only keep values contained in `b`.
+Create a `Set` with all values of `a` and `b` and convert to an array.
 
 ```js
-const intersection = (a, b) => { const s = new Set(b); return a.filter(x => s.has(x)); };
-// intersection([1,2,3], [4,3,2]) -> [2,3]
+const union = (a, b) => Array.from(new Set([...a, ...b]));
+// union([1,2,3], [4,3,2]) -> [1,2,3,4]
 ```
 
-[⬆ back to top](#table-of-contents)
+### Array without
+
+without: exclusive
+
+Use `Array.filter()` to create an array excluding all given values.
+
+```js
+const without = (arr, ...args) => arr.filter(v => args.indexOf(v) === -1);
+// without[2, 1, 2, 3], 1, 2) -> [3]
+// without([2, 1, 2, 3, 4, 5, 5, 5, 3, 2, 7, 7], 3, 1, 5, 2) -> [ 4, 7, 7 ]
+```
 
 ### Array remove
+
+这是干啥...
 
 Use `Array.filter()` to find array elements that return truthy values and `Array.reduce()` to remove elements using `Array.splice()`.
 The `func` is invoked with three arguments (`value, index, array`).
@@ -186,9 +74,13 @@ const remove = (arr, func) =>
 //remove([1, 2, 3, 4], n => n % 2 == 0) -> [2, 4]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Array sample
+
+sample(arr): 随机选择一个元素
+
+Math.random() => [0, 1)
+Math.random() * arr.length => [0, len)
+Floor 一下确实是概率均等的.
 
 Use `Math.random()` to generate a random number, multiply it with `length` and round it of to the nearest whole number using `Math.floor()`.
 This method also works with strings.
@@ -198,32 +90,16 @@ const sample = arr => arr[Math.floor(Math.random() * arr.length)];
 // sample([3, 7, 9, 11]) -> 9
 ```
 
-[⬆ back to top](#table-of-contents)
-
-### Array union
-
-Create a `Set` with all values of `a` and `b` and convert to an array.
-
-```js
-const union = (a, b) => Array.from(new Set([...a, ...b]));
-// union([1,2,3], [4,3,2]) -> [1,2,3,4]
-```
-
-[⬆ back to top](#table-of-contents)
-
-### Array without
-
-Use `Array.filter()` to create an array excluding all given values.
-
-```js
-const without = (arr, ...args) => arr.filter(v => args.indexOf(v) === -1);
-// without[2, 1, 2, 3], 1, 2) -> [3]
-// without([2, 1, 2, 3, 4, 5, 5, 5, 3, 2, 7, 7], 3, 1, 5, 2) -> [ 4, 7, 7 ]
-```
-
-[⬆ back to top](#table-of-contents)
-
 ### Array zip
+
+zip(...arrays): 这个太牛逼
+
+[Array.from() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
+
+```js
+// Array.from(arrayLike, mapFn, thisArg)
+Array.from({length: 5}) -> [undefined, undefined, undefined, undefined, undefined]
+```
 
 Use `Math.max.apply()` to get the longest array in the arguments.
 Creates an array with that length as return value and use `Array.from()` with a map-function to create an array of grouped elements.
@@ -240,9 +116,9 @@ const zip = (...arrays) => {
 //zip(['a'], [1, 2], [true, false]); -> [['a', 1, true], [undefined, 2, false]]
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Average of array of numbers
+
+average(arr): 求平均值, reduce 来求和, 然后 divide by length
 
 Use `Array.reduce()` to add each value to an accumulator, initialized with a value of `0`, divide by the `length` of the array.
 
@@ -251,9 +127,9 @@ const average = arr => arr.reduce((acc, val) => acc + val, 0) / arr.length;
 // average([1,2,3]) -> 2
 ```
 
-[⬆ back to top](#table-of-contents)
-
 ### Chunk array
+
+chunk(arr,size): 很巧妙
 
 Use `Array.from()` to create a new array, that fits the number of chunks that will be produced.
 Use `Array.slice()` to map each element of the new array to a chunk the length of `size`.
@@ -265,7 +141,9 @@ const chunk = (arr, size) =>
 // chunk([1,2,3,4,5], 2) -> [[1,2],[3,4],[5]]
 ```
 
-[⬆ back to top](#table-of-contents)
+---
+
+TODO
 
 ### Compact
 
