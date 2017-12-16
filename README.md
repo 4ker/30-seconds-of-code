@@ -191,7 +191,7 @@ const deepFlatten = arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlat
 
 dropElements(arr,func): drop 元素, 直到满足 func 的条件, 用 Array.shift 来去掉头一个元素.
 
-Loop through the array, using `Array.shift()` to drop the first element of the array until the returned value from the function is `true`. 
+Loop through the array, using `Array.shift()` to drop the first element of the array until the returned value from the function is `true`.
 Returns the remaining elements.
 
 ```js
@@ -613,6 +613,10 @@ const curry = (fn, arity = fn.length, ...args) =>
 
 ### Pipe
 
+[Array.prototype.reduce() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce):
+
+arr.reduce(callback[, initialValue])
+
 Use `Array.reduce()` to perform left-to-right function composition.
 The first (leftmost) function can accept one or more arguments; the remaining functions must be unary.
 
@@ -628,8 +632,8 @@ multiplyAndAdd5(5, 2) -> 15
 
 ### Promisify
 
-Use currying to return a function returning a `Promise` that calls the original function. 
-Use the `...rest` operator to pass in all the parameters. 
+Use currying to return a function returning a `Promise` that calls the original function.
+Use the `...rest` operator to pass in all the parameters.
 
 *In Node 8+, you can use [`util.promisify`](https://nodejs.org/api/util.html#util_util_promisify_original)*
 
@@ -708,7 +712,7 @@ const factorial = n => n <= 1 ? 1 : n * factorial(n - 1);
 写了个尾递归的:
 
 ```js
-const factorial = (n, ret=1) => n <= 1 ? ret : factorial(n - 1, n*res);
+const factorial = (n, ret=1) => n <= 1 ? ret : factorial(n - 1, n*ret);
 // factorial(6) -> 720
 ```
 
@@ -997,7 +1001,7 @@ const timeTaken = callback => {
 ### Number to array of digits
 
 Convert the number to a string, use `split()` to convert build an array.
-Use `Array.map()` and `parseInt()` to transform each value to an integer. 
+Use `Array.map()` and `parseInt()` to transform each value to an integer.
 
 ```js
 const digitize = n => (''+n).split('').map(i => parseInt(i));
